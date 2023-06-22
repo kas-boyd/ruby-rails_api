@@ -1,5 +1,4 @@
 class Team < ApplicationRecord
-    belongs_to :trainers
+    belongs_to :trainer
     has_many :pokemons
   end
-  
