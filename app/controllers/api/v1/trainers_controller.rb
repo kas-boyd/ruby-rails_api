@@ -24,6 +24,18 @@ class   Api::V1::TrainersController < ApplicationController
     end
   end
 
+  #POST /trainers/1/teams
+  def create_team
+    @trainer = Trainer.find(params[:id])
+    @team = @trainer.build_team(team_params)
+
+    if @team.save
+      render json: @team, status: :created, location: @team
+    else
+      render json @team.errors, status: :unprocessable_entity
+    end
+  end
+
   # PATCH/PUT /trainers/1
   def update
     if @trainer.update(trainer_params)
@@ -44,8 +56,12 @@ class   Api::V1::TrainersController < ApplicationController
       @trainer = Trainer.find(params[:id])
     end
 
-    # Only allow a list of trusted parameters through.
+    # Only allow a list of trusted parameters through for trainers.
     def trainer_params
       params.require(:trainer).permit(:name)
+    end
+
+    def team_params
+      params.require(:team).permit(:trainer_id)
     end
 end
